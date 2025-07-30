@@ -106,8 +106,16 @@ fun HomeScreen(navController: NavController, countryCode: String?) {
                 horizontalArrangement = Arrangement.SpaceEvenly,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                SelectionWhats(title = "WhatsApp", icon = R.drawable.image_1) {}
-                SelectionWhats(title = "WhatsApp Business", icon = R.drawable.image_2) {}
+                SelectionWhats(
+                    title = "WhatsApp",
+                    icon = R.drawable.image_1
+                ) { navController.navigate(Screens.StatusScreen.route) }
+
+                SelectionWhats(
+                    title = "WhatsApp Business",
+                    icon = R.drawable.image_2
+                ) { navController.navigate(Screens.StatusScreen.route) }
+
                 SelectionWhats(title = "WhatsApp Web", icon = R.drawable.image_3) {}
             }
         }

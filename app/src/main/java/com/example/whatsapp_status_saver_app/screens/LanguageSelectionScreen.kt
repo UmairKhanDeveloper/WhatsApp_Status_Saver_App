@@ -1,6 +1,7 @@
 package com.example.whatsapp_status_saver_app.screens
 
 import android.annotation.SuppressLint
+import android.content.Context
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -31,6 +32,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -40,6 +42,9 @@ import androidx.navigation.NavController
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LanguageSelectionScreen(navController: NavController) {
+    val context = LocalContext.current
+    val prefsManager = remember { SharedPrefsManager(context) }
+
     val languages = listOf(
         Language("English", "GB"),
         Language("اردو", "PK"),
@@ -118,9 +123,12 @@ fun LanguageSelectionScreen(navController: NavController) {
 
             Button(
                 onClick = {
-                    navController.navigate(
-                        Screens.HomeScreen.route + "/${selectedCountryCode}"
-                    )
+                    prefsManager.saveBoolean("isLanguageSelected", true)
+                    prefsManager.saveString("selectedCountryCode", selectedCountryCode)
+
+                    navController.navigate(Screens.HomeScreen.route + "/${selectedCountryCode}") {
+                        popUpTo(Screens.LanguageSelectionScreen.route) { inclusive = true }
+                    }
                 },
                 colors = ButtonDefaults.buttonColors(
                     containerColor = Color(0xFF00C3A6)
@@ -141,6 +149,7 @@ fun LanguageSelectionScreen(navController: NavController) {
     }
 }
 
+
 data class Language(val name: String, val countryCode: String)
 
 fun countryCodeToFlag(countryCode: String): String {
@@ -149,3 +158,25 @@ fun countryCodeToFlag(countryCode: String): String {
             Character.toChars(char.code + 0x1F1A5).concatToString()
         }.joinToString("")
 }
+
+
+class SharedPrefsManager(context: Context) {
+    private val prefs = context.getSharedPreferences("prefs", Context.MODE_PRIVATE)
+
+    fun saveBoolean(key: String, value: Boolean) {
+        prefs.edit().putBoolean(key, value).apply()
+    }
+
+    fun getBoolean(key: String, defaultValue: Boolean = false): Boolean {
+        return prefs.getBoolean(key, defaultValue)
+    }
+
+    fun saveString(key: String, value: String) {
+        prefs.edit().putString(key, value).apply()
+    }
+
+    fun getString(key: String, defaultValue: String? = null): String? {
+        return prefs.getString(key, defaultValue)
+    }
+}
+

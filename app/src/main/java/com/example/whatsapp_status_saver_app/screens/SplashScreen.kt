@@ -26,6 +26,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -36,19 +37,28 @@ import kotlinx.coroutines.delay
 
 @Composable
 fun SplashScreen(navController: NavHostController) {
+    val context = LocalContext.current
+    val prefsManager = remember { SharedPrefsManager(context) }
     val scale = remember { androidx.compose.animation.core.Animatable(0f) }
 
-    LaunchedEffect(true) {
+    val isLanguageSelected = prefsManager.getBoolean("isLanguageSelected", false)
+
+    LaunchedEffect(Unit) {
         scale.animateTo(
             targetValue = 1f,
             animationSpec = tween(
                 durationMillis = 1000,
-                easing = {
-                    OvershootInterpolator(4f).getInterpolation(it)
-                }
+                easing = { OvershootInterpolator(4f).getInterpolation(it) }
             )
         )
         delay(2000)
+
+        if (isLanguageSelected) {
+            val savedCountryCode = prefsManager.getString("selectedCountryCode", "GB") ?: "GB"
+            navController.navigate(Screens.HomeScreen.route + "/$savedCountryCode") {
+                popUpTo(0)
+            }
+        }
     }
 
     Box(
@@ -64,9 +74,7 @@ fun SplashScreen(navController: NavHostController) {
             ),
         contentAlignment = Alignment.Center
     ) {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Image(
                 painter = painterResource(id = R.drawable.splash),
                 contentDescription = null,
@@ -74,7 +82,6 @@ fun SplashScreen(navController: NavHostController) {
                     .scale(scale.value)
                     .size(200.dp)
             )
-
             Spacer(modifier = Modifier.height(16.dp))
             Text(
                 text = "Status up",
@@ -82,9 +89,7 @@ fun SplashScreen(navController: NavHostController) {
                 fontWeight = FontWeight.Bold,
                 color = Color.White
             )
-            Row(
-                verticalAlignment = Alignment.CenterVertically
-            ) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
                 Box(
                     modifier = Modifier
                         .height(2.dp)
@@ -111,25 +116,28 @@ fun SplashScreen(navController: NavHostController) {
 
             Spacer(modifier = Modifier.height(200.dp))
 
-            Button(
-                onClick = {
-                    navController.popBackStack()
-                    navController.navigate(Screens.LanguageSelectionScreen.route)
-                },
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color(0xFF00C3A6)
-                ),
-                shape = RoundedCornerShape(50),
-                modifier = Modifier
-                    .fillMaxWidth(0.7f)
-                    .height(50.dp)
-            ) {
-                Text(
-                    text = "Get Started",
-                    color = Color.White,
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.SemiBold
-                )
+            if (!isLanguageSelected) {
+                Button(
+                    onClick = {
+                        navController.navigate(Screens.LanguageSelectionScreen.route) {
+                            popUpTo(0)
+                        }
+                    },
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color(0xFF00C3A6)
+                    ),
+                    shape = RoundedCornerShape(50),
+                    modifier = Modifier
+                        .fillMaxWidth(0.7f)
+                        .height(50.dp)
+                ) {
+                    Text(
+                        text = "Get Started",
+                        color = Color.White,
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.SemiBold
+                    )
+                }
             }
         }
     }
