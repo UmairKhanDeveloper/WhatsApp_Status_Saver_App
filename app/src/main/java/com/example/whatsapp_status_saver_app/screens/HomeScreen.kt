@@ -1,5 +1,6 @@
 package com.example.whatsapp_status_saver_app.screens
 
+import androidx.annotation.DrawableRes
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -94,7 +95,6 @@ fun HomeScreen(navController: NavController, countryCode: String?) {
                 .padding(top = 100.dp)
                 .width(340.dp)
                 .height(150.dp),
-            shape = RoundedCornerShape(16.dp),
             elevation = CardDefaults.cardElevation(1.dp),
             colors = CardDefaults.cardColors(containerColor = Color.White),
             border = BorderStroke(1.dp, Color(0xFFE0E0E0))
@@ -110,9 +110,45 @@ fun HomeScreen(navController: NavController, countryCode: String?) {
                 SelectionWhats(title = "WhatsApp Business", icon = R.drawable.image_2) {}
                 SelectionWhats(title = "WhatsApp Web", icon = R.drawable.image_3) {}
             }
-
-
         }
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .align(Alignment.TopCenter)
+                .padding(top = 270.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceEvenly
+        ) {
+            CardItem(title = "Direct Chat", icon = R.drawable.telegramlogo) {}
+            CardItem(title = "Saved Files", icon = R.drawable.folder) {}
+        }
+
+        Card(
+            modifier = Modifier
+                .align(Alignment.TopCenter)
+                .padding(top = 360.dp)
+                .width(340.dp)
+                .height(110.dp),
+            elevation = CardDefaults.cardElevation(1.dp),
+            colors = CardDefaults.cardColors(containerColor = Color.White),
+            border = BorderStroke(1.dp, Color(0xFFE0E0E0))
+        ) {
+            Row(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = 12.dp),
+                horizontalArrangement = Arrangement.SpaceEvenly,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                SettingItem(title = "Rate US", icon = R.drawable.star) {
+                }
+                SettingItem(title = "Share App", icon = R.drawable.share) {
+                }
+                SettingItem(title = "Privacy Policy", icon = R.drawable.shield) {
+                }
+            }
+        }
+
     }
 }
 
@@ -127,9 +163,8 @@ fun SelectionWhats(
         modifier = Modifier
             .size(90.dp)
             .clickable { onClick() },
-        shape = RoundedCornerShape(12.dp),
         colors = CardDefaults.cardColors(containerColor = Color(0xFF00B09C)),
-        elevation = CardDefaults.cardElevation(2.dp)
+        elevation = CardDefaults.cardElevation(1.dp)
     ) {
         Column(
             modifier = Modifier
@@ -163,5 +198,91 @@ fun SelectionWhats(
                 textAlign = TextAlign.Center
             )
         }
+    }
+}
+
+@Composable
+fun CardItem(title: String, icon: Int, onClick: () -> Unit) {
+    Card(
+        modifier = Modifier
+            .width(165.dp)
+            .height(75.dp)
+            .clickable { onClick() },
+        shape = RoundedCornerShape(16.dp),
+        elevation = CardDefaults.cardElevation(1.dp),
+        colors = CardDefaults.cardColors(containerColor = Color.White),
+        border = BorderStroke(1.dp, Color(0xFFE0E0E0))
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = 12.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Start
+        ) {
+            Box(
+                modifier = Modifier
+                    .size(40.dp)
+                    .background(
+                        color = Color(0xFF00B09C),
+                        shape = CircleShape
+                    ),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    painter = painterResource(id = icon),
+                    contentDescription = null,
+                    tint = Color.White,
+                    modifier = Modifier.size(20.dp)
+                )
+            }
+            Spacer(modifier = Modifier.width(12.dp))
+            Text(
+                text = title,
+                fontSize = 14.sp,
+                color = Color.Black,
+                fontWeight = FontWeight.Medium
+            )
+        }
+    }
+}
+
+
+@Composable
+fun SettingItem(
+    title: String,
+    @DrawableRes icon: Int,
+    iconTint: Color = Color(0xFF00B09C),
+    iconBackground: Color = Color(0xFF00B09C).copy(alpha = 0.15f),
+    onClick: () -> Unit
+) {
+    Column(
+        modifier = Modifier
+            .clickable { onClick() }
+            .padding(8.dp),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Box(
+            modifier = Modifier
+                .size(36.dp)
+                .background(color = iconBackground, shape = CircleShape),
+            contentAlignment = Alignment.Center
+        ) {
+            Icon(
+                painter = painterResource(id = icon),
+                contentDescription = null,
+                tint = iconTint,
+                modifier = Modifier.size(18.dp)
+            )
+        }
+        Spacer(modifier = Modifier.height(6.dp))
+        Text(
+            text = title,
+            fontSize = 11.sp,
+            color = Color.Black,
+            fontWeight = FontWeight.Medium,
+            textAlign = TextAlign.Center
+        )
     }
 }
