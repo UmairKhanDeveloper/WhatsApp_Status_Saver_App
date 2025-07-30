@@ -37,6 +37,11 @@ fun Navigation(navController: NavHostController) {
             DirectChatScreen(navController)
         }
 
+        composable(Screens.PrivacyPolicy.route) {
+            PrivacyPolicy(navController)
+        }
+
+
 
     }
 }
@@ -81,6 +86,12 @@ sealed class Screens(
     object DirectChatScreen : Screens(
         "DirectChatScreen",
         "DirectChatScreen",
+        Icon = Icons.Filled.Add,
+    )
+
+    object PrivacyPolicy : Screens(
+        "PrivacyPolicy",
+        "PrivacyPolicy",
         Icon = Icons.Filled.Add,
     )
 

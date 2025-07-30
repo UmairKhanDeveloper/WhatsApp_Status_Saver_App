@@ -1,5 +1,6 @@
 package com.example.whatsapp_status_saver_app.screens
 
+import android.content.Intent
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -17,14 +18,27 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.outlined.Star
+import androidx.compose.material.icons.outlined.StarBorder
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -36,6 +50,7 @@ import androidx.navigation.NavController
 import com.example.whatsapp_status_saver_app.R
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(navController: NavController, countryCode: String?) {
     val context = LocalContext.current
@@ -44,6 +59,8 @@ fun HomeScreen(navController: NavController, countryCode: String?) {
     val languageCode = remember {
         countryCode ?: prefsManager.getString("selectedCountryCode", "GB") ?: "GB"
     }
+
+    var showRateUsDialog by remember { mutableStateOf(false) }
 
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         Column(modifier = Modifier.fillMaxSize()) {
@@ -161,11 +178,122 @@ fun HomeScreen(navController: NavController, countryCode: String?) {
                 horizontalArrangement = Arrangement.SpaceEvenly,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                SettingItem(title = "Rate US", icon = R.drawable.star) {}
-                SettingItem(title = "Share App", icon = R.drawable.share) {}
-                SettingItem(title = "Privacy Policy", icon = R.drawable.shield) {}
+                SettingItem(title = "Rate US", icon = R.drawable.star) {
+                    showRateUsDialog = true
+                }
+                SettingItem(title = "Share App", icon = R.drawable.share) {
+                    val sendIntent = Intent().apply {
+                        action = Intent.ACTION_SEND
+                        putExtra(
+                            Intent.EXTRA_TEXT,
+                            "Check out this amazing app: https://play.google.com/store/apps/details?id=${context.packageName}"
+                        )
+                        type = "text/plain"
+                    }
+                    val shareIntent = Intent.createChooser(sendIntent, null)
+                    context.startActivity(shareIntent)
+                }
+
+                SettingItem(title = "Privacy Policy", icon = R.drawable.shield) {
+                    navController.navigate(Screens.PrivacyPolicy.route)
+                }
             }
         }
+
+        if (showRateUsDialog) {
+            AlertDialog(
+                onDismissRequest = { showRateUsDialog = false },
+                confirmButton = {},
+                dismissButton = {},
+                text = {
+                    RateUsDialogContent(
+                        onRateClick = { showRateUsDialog = false },
+                        onLaterClick = { showRateUsDialog = false }
+                    )
+                },
+                shape = RoundedCornerShape(16.dp),
+                containerColor = Color.White
+            )
+        }
+    }
+}
+
+@Composable
+fun RateUsDialogContent(onRateClick: () -> Unit, onLaterClick: () -> Unit) {
+    var selectedRating by remember { mutableStateOf(1) }
+
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 20.dp, vertical = 16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+
+        Icon(
+            painter = painterResource(id = R.drawable.ic_thoumb),
+            contentDescription = "Thumb",
+            tint = Color(0xFF039840),
+            modifier = Modifier.size(120.dp)
+        )
+
+
+        Spacer(modifier = Modifier.height(12.dp))
+
+        Text(
+            text = "Your Opinion Matter to us!",
+            fontWeight = FontWeight.Bold,
+            fontSize = 16.sp,
+            textAlign = TextAlign.Center
+        )
+
+        Spacer(modifier = Modifier.height(4.dp))
+
+        Text(
+            text = "Tell us how was your experience with status up app?",
+            fontSize = 14.sp,
+            color = Color.Gray,
+            textAlign = TextAlign.Center
+        )
+
+        Spacer(modifier = Modifier.height(12.dp))
+
+
+        Row(horizontalArrangement = Arrangement.Center) {
+            repeat(5) { index ->
+                Icon(
+
+                    imageVector = if (index < selectedRating) Icons.Default.Star else Icons.Outlined.Star,
+                    contentDescription = "Star",
+                    tint = if (index < selectedRating) Color(0xFFFFC107) else Color.Gray,
+                    modifier = Modifier
+                        .size(28.dp)
+                        .clickable { selectedRating = index + 1 }
+                )
+            }
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Button(
+            onClick = onRateClick,
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(50.dp)
+                .clip(RoundedCornerShape(25.dp)),
+            colors = ButtonDefaults.buttonColors(containerColor = Color(0XFF039840))
+        ) {
+            Text("Rate Us", color = Color.White, fontSize = 16.sp, fontWeight = FontWeight.Bold)
+        }
+
+        Spacer(modifier = Modifier.height(12.dp))
+
+        Text(
+            text = "Later",
+            color = Color.Gray, fontSize = 24.sp,
+            modifier = Modifier.clickable { onLaterClick() }
+        )
+
+        Spacer(modifier = Modifier.height(8.dp))
     }
 }
 
