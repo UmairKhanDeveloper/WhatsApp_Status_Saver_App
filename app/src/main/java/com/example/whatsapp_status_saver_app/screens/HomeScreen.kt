@@ -102,6 +102,7 @@ fun HomeScreen(navController: NavController, countryCode: String?) {
                 .padding(top = 100.dp)
                 .width(340.dp)
                 .height(150.dp),
+            shape = RoundedCornerShape(6.dp),
             elevation = CardDefaults.cardElevation(1.dp),
             colors = CardDefaults.cardColors(containerColor = Color.White),
             border = BorderStroke(1.dp, Color(0xFFE0E0E0))
@@ -135,7 +136,10 @@ fun HomeScreen(navController: NavController, countryCode: String?) {
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
-            CardItem(title = "Direct Chat", icon = R.drawable.telegramlogo) {}
+            CardItem(
+                title = "Direct Chat",
+                icon = R.drawable.telegramlogo
+            ) { navController.navigate(Screens.DirectChatScreen.route) }
             CardItem(title = "Saved Files", icon = R.drawable.folder) {}
         }
 
@@ -144,7 +148,8 @@ fun HomeScreen(navController: NavController, countryCode: String?) {
                 .align(Alignment.TopCenter)
                 .padding(top = 360.dp)
                 .width(340.dp)
-                .height(110.dp),
+                .height(120.dp),
+            shape = RoundedCornerShape(6.dp),
             elevation = CardDefaults.cardElevation(1.dp),
             colors = CardDefaults.cardColors(containerColor = Color.White),
             border = BorderStroke(1.dp, Color(0xFFE0E0E0))
@@ -218,9 +223,9 @@ fun CardItem(title: String, icon: Int, onClick: () -> Unit) {
     Card(
         modifier = Modifier
             .width(165.dp)
-            .height(75.dp)
+            .height(70.dp)
             .clickable { onClick() },
-        shape = RoundedCornerShape(16.dp),
+        shape = RoundedCornerShape(10.dp),
         elevation = CardDefaults.cardElevation(1.dp),
         colors = CardDefaults.cardColors(containerColor = Color.White),
         border = BorderStroke(1.dp, Color(0xFFE0E0E0))
@@ -277,7 +282,7 @@ fun SettingItem(
     ) {
         Box(
             modifier = Modifier
-                .size(36.dp)
+                .size(50.dp)
                 .background(color = iconBackground, shape = CircleShape),
             contentAlignment = Alignment.Center
         ) {
@@ -285,7 +290,7 @@ fun SettingItem(
                 painter = painterResource(id = icon),
                 contentDescription = null,
                 tint = iconTint,
-                modifier = Modifier.size(18.dp)
+                modifier = Modifier.size(24.dp)
             )
         }
         Spacer(modifier = Modifier.height(6.dp))

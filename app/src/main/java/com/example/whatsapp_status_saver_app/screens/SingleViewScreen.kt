@@ -19,7 +19,10 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Download
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
+import androidx.compose.material.icons.filled.Share
+import androidx.compose.material.icons.filled.Whatsapp
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
@@ -30,6 +33,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -98,15 +102,15 @@ fun SingleViewScreen(navController: NavController) {
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 ActionIconButton(
-                    icon = R.drawable.whatsapp,
+                    icon = Icons.Default.Whatsapp,
                     contentDescription = "Share on WhatsApp"
                 )
                 ActionIconButton(
-                    icon = R.drawable.share,
+                    icon = Icons.Default.Share,
                     contentDescription = "Share"
                 )
                 ActionIconButton(
-                    icon = R.drawable.download,
+                    icon = Icons.Default.Download,
                     contentDescription = "Download"
                 )
             }
@@ -118,7 +122,7 @@ fun SingleViewScreen(navController: NavController) {
 
 @Composable
 fun ActionIconButton(
-    @DrawableRes icon: Int,
+     icon:ImageVector ,
     contentDescription: String
 ) {
     Box(
@@ -129,7 +133,7 @@ fun ActionIconButton(
         contentAlignment = Alignment.Center
     ) {
         Icon(
-            painter = painterResource(id = icon),
+            imageVector = icon,
             contentDescription = contentDescription,
             tint = Color.White,
             modifier = Modifier.size(24.dp)
