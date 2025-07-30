@@ -12,7 +12,7 @@ import androidx.navigation.compose.composable
 fun Navigation(navController: NavHostController) {
     NavHost(navController = navController, startDestination = Screens.SplashScreen.route) {
         composable(Screens.SplashScreen.route) {
-            SplashScreen(navController)
+            SingleViewScreen(navController)
         }
 
         composable(Screens.HomeScreen.route + "/{countryCode}") { backStackEntry ->
@@ -27,6 +27,9 @@ fun Navigation(navController: NavHostController) {
 
         composable(Screens.StatusScreen.route) {
             StatusScreen(navController)
+        }
+        composable(Screens.SingleViewScreen.route) {
+            SingleViewScreen(navController)
         }
 
 
@@ -61,6 +64,11 @@ sealed class Screens(
     object StatusScreen : Screens(
         "StatusScreen",
         "StatusScreen",
+        Icon = Icons.Filled.Add,
+    )
+    object SingleViewScreen : Screens(
+        "SingleViewScreen",
+        "SingleViewScreen",
         Icon = Icons.Filled.Add,
     )
 
