@@ -55,8 +55,12 @@ fun LanguageSelectionScreen(navController: NavController) {
         Language("Bosnian", "BA")
     )
 
-    var selectedLanguage by remember { mutableStateOf("English") }
-    var selectedCountryCode by remember { mutableStateOf("GB") }
+    var selectedCountryCode by remember {
+        mutableStateOf(prefsManager.getString("selectedCountryCode", "GB") ?: "GB")
+    }
+    var selectedLanguage by remember {
+        mutableStateOf(languages.find { it.countryCode == selectedCountryCode }?.name ?: "English")
+    }
 
     Scaffold(
         topBar = {
@@ -82,9 +86,7 @@ fun LanguageSelectionScreen(navController: NavController) {
                 .padding(top = it.calculateTopPadding(), bottom = 80.dp)
                 .padding(horizontal = 16.dp)
         ) {
-            LazyColumn(
-                modifier = Modifier.weight(1f)
-            ) {
+            LazyColumn(modifier = Modifier.weight(1f)) {
                 items(languages) { language ->
                     Row(
                         modifier = Modifier
@@ -107,7 +109,7 @@ fun LanguageSelectionScreen(navController: NavController) {
                             modifier = Modifier.weight(1f)
                         )
                         RadioButton(
-                            selected = selectedLanguage == language.name,
+                            selected = selectedCountryCode == language.countryCode,
                             onClick = {
                                 selectedLanguage = language.name
                                 selectedCountryCode = language.countryCode
@@ -126,7 +128,7 @@ fun LanguageSelectionScreen(navController: NavController) {
                     prefsManager.saveBoolean("isLanguageSelected", true)
                     prefsManager.saveString("selectedCountryCode", selectedCountryCode)
 
-                    navController.navigate(Screens.HomeScreen.route + "/${selectedCountryCode}") {
+                    navController.navigate(Screens.HomeScreen.route + "/$selectedCountryCode") {
                         popUpTo(Screens.LanguageSelectionScreen.route) { inclusive = true }
                     }
                 },

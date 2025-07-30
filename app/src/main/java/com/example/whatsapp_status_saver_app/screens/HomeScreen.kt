@@ -22,9 +22,11 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -36,7 +38,12 @@ import com.example.whatsapp_status_saver_app.R
 
 @Composable
 fun HomeScreen(navController: NavController, countryCode: String?) {
-    val languageCode = countryCode ?: "GB"
+    val context = LocalContext.current
+    val prefsManager = remember { SharedPrefsManager(context) }
+
+    val languageCode = remember {
+        countryCode ?: prefsManager.getString("selectedCountryCode", "GB") ?: "GB"
+    }
 
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         Column(modifier = Modifier.fillMaxSize()) {
@@ -119,6 +126,7 @@ fun HomeScreen(navController: NavController, countryCode: String?) {
                 SelectionWhats(title = "WhatsApp Web", icon = R.drawable.image_3) {}
             }
         }
+
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -148,15 +156,11 @@ fun HomeScreen(navController: NavController, countryCode: String?) {
                 horizontalArrangement = Arrangement.SpaceEvenly,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                SettingItem(title = "Rate US", icon = R.drawable.star) {
-                }
-                SettingItem(title = "Share App", icon = R.drawable.share) {
-                }
-                SettingItem(title = "Privacy Policy", icon = R.drawable.shield) {
-                }
+                SettingItem(title = "Rate US", icon = R.drawable.star) {}
+                SettingItem(title = "Share App", icon = R.drawable.share) {}
+                SettingItem(title = "Privacy Policy", icon = R.drawable.shield) {}
             }
         }
-
     }
 }
 
