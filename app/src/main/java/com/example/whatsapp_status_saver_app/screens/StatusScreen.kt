@@ -1,16 +1,14 @@
 package com.example.whatsapp_status_saver_app.screens
 
 import android.Manifest
-import android.content.ContentUris
-import android.content.Context
 import android.content.Intent
-import android.media.MediaScannerConnection
 import android.media.ThumbnailUtils
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
 import android.provider.Settings
+import android.util.Size
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -60,13 +58,8 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.content.FileProvider
-import androidx.core.net.toUri
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
-import coil.request.CachePolicy
-import coil.request.ImageRequest
-import coil.request.videoFrameMillis
 import java.io.File
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -201,6 +194,7 @@ fun StatusScreen(navController: NavController) {
                 ) {
                     items(filteredFiles) { file ->
                         if (selectedTabIndex == 0) {
+                            // Photos
                             AsyncImage(
                                 model = file,
                                 contentDescription = null,
@@ -210,27 +204,56 @@ fun StatusScreen(navController: NavController) {
                                     .clip(RoundedCornerShape(8.dp))
                                     .fillMaxWidth()
                                     .height(120.dp)
+                                    .clickable {
+                                        navController.navigate(
+                                            Screens.SingleViewScreen.route + "/${Uri.encode(file.absolutePath)}"
+                                        )
+                                    }
                             )
                         } else {
-                            VideoThumbnail(file)
+                            // Videos
+                            VideoThumbnail(
+                                file = file,
+                                onClick = {
+                                    navController.navigate(
+                                        Screens.SingleViewScreen.route + "/${Uri.encode(file.absolutePath)}"
+                                    )
+                                }
+                            )
                         }
                     }
                 }
+
             }
         }
     }
 }
 
 @Composable
-fun VideoThumbnail(file: File) {
-    val bitmap = remember(file.path) {
-        ThumbnailUtils.createVideoThumbnail(file.path, MediaStore.Video.Thumbnails.MINI_KIND)
+fun VideoThumbnail(file: File, onClick: () -> Unit) {
+    val context = LocalContext.current
+    val bitmap by remember(file.path) {
+        mutableStateOf(
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                ThumbnailUtils.createVideoThumbnail(
+                    file,
+                    Size(200, 200),
+                    null
+                )
+            } else {
+                ThumbnailUtils.createVideoThumbnail(
+                    file.path,
+                    MediaStore.Video.Thumbnails.MINI_KIND
+                )
+            }
+        )
     }
 
     Box(
         Modifier
             .padding(2.dp)
             .clip(RoundedCornerShape(8.dp))
+            .clickable { onClick() }
             .fillMaxWidth()
             .height(120.dp)
     ) {
@@ -241,7 +264,15 @@ fun VideoThumbnail(file: File) {
                 contentScale = ContentScale.Crop,
                 modifier = Modifier.matchParentSize()
             )
+        } ?: Box(
+            modifier = Modifier
+                .matchParentSize()
+                .background(Color.Gray),
+            contentAlignment = Alignment.Center
+        ) {
+            Text("No Preview", color = Color.White, fontSize = 12.sp)
         }
+
         Icon(
             Icons.Default.PlayArrow,
             contentDescription = null,
@@ -254,6 +285,7 @@ fun VideoThumbnail(file: File) {
         )
     }
 }
+
 
 fun loadStatuses(app: String): List<File> {
     val path = if (app == "WhatsApp")

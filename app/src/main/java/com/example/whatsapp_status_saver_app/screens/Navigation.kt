@@ -29,8 +29,9 @@ fun Navigation(navController: NavHostController) {
             StatusScreen(navController)
         }
 
-        composable(Screens.SingleViewScreen.route) {
-            SingleViewScreen(navController)
+        composable(Screens.SingleViewScreen.route + "/{filePath}") { backStackEntry ->
+            val filePath = backStackEntry.arguments?.getString("filePath")
+            SingleViewScreen(navController, filePath)
         }
 
         composable(Screens.DirectChatScreen.route) {
@@ -40,6 +41,13 @@ fun Navigation(navController: NavHostController) {
         composable(Screens.PrivacyPolicy.route) {
             PrivacyPolicy(navController)
         }
+
+        composable(Screens.ExoPlayer.route + "/{filePath}") { backStackEntry ->
+            val filePath = backStackEntry.arguments?.getString("filePath")
+            ExoPlayerScreen(navController, filePath)
+        }
+
+
 
 
 
@@ -92,6 +100,11 @@ sealed class Screens(
     object PrivacyPolicy : Screens(
         "PrivacyPolicy",
         "PrivacyPolicy",
+        Icon = Icons.Filled.Add,
+    )
+    object ExoPlayer : Screens(
+        "ExoPlayer",
+        "ExoPlayer",
         Icon = Icons.Filled.Add,
     )
 

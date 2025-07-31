@@ -1,6 +1,9 @@
 package com.example.whatsapp_status_saver_app.screens
 
 import android.annotation.SuppressLint
+import android.content.Intent
+import android.net.Uri
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -40,6 +43,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
@@ -50,43 +54,46 @@ import androidx.navigation.NavController
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun DirectChatScreen(navController: NavController) {
+    val context = LocalContext.current
     var number by remember { mutableStateOf("") }
     var message by remember { mutableStateOf("") }
     var selectedCode by remember { mutableStateOf("92") }
 
-    Scaffold(topBar = {
-        TopAppBar(
-            title = {},
-            navigationIcon = {
-                Row(
-                    modifier = Modifier.padding(start = 10.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Box(
-                        modifier = Modifier
-                            .clickable { navController.popBackStack() }
-                            .clip(RoundedCornerShape(10.dp))
-                            .size(32.dp)
-                            .background(Color(0XFF039840).copy(alpha = 0.100f)),
-                        contentAlignment = Alignment.Center
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = {},
+                navigationIcon = {
+                    Row(
+                        modifier = Modifier.padding(start = 10.dp),
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Icon(
-                            imageVector = Icons.Default.KeyboardArrowLeft,
-                            contentDescription = "Back",
-                            tint = Color(0XFF039840)
+                        Box(
+                            modifier = Modifier
+                                .clickable { navController.popBackStack() }
+                                .clip(RoundedCornerShape(10.dp))
+                                .size(32.dp)
+                                .background(Color(0XFF039840).copy(alpha = 0.100f)),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.KeyboardArrowLeft,
+                                contentDescription = "Back",
+                                tint = Color(0XFF039840)
+                            )
+                        }
+                        Spacer(modifier = Modifier.width(20.dp))
+                        Text(
+                            text = "Direct Chat",
+                            color = Color.Black,
+                            fontSize = 20.sp,
+                            fontWeight = FontWeight.Medium
                         )
                     }
-                    Spacer(modifier = Modifier.width(20.dp))
-                    Text(
-                        text = "Direct Chat",
-                        color = Color.Black,
-                        fontSize = 20.sp,
-                        fontWeight = FontWeight.Medium
-                    )
                 }
-            }
-        )
-    }) {
+            )
+        }
+    ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -106,11 +113,19 @@ fun DirectChatScreen(navController: NavController) {
             Spacer(modifier = Modifier.height(12.dp))
 
             OutlinedTextField(
-                value = "+$selectedCode $number",
+                value = number,
                 onValueChange = { input ->
-                    number = input.removePrefix("+$selectedCode ").filter { it.isDigit() }
+                    number = input.filter { it.isDigit() }
                 },
-                placeholder = { Text("Enter Your Number", color = Color.Gray) },
+                placeholder = { Text("Enter Number", color = Color.Gray) },
+                leadingIcon = {
+                    Text(
+                        text = "+$selectedCode",
+                        color = Color.Black,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.padding(start = 4.dp)
+                    )
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .clip(RoundedCornerShape(4.dp)),
@@ -129,7 +144,7 @@ fun DirectChatScreen(navController: NavController) {
             OutlinedTextField(
                 value = message,
                 onValueChange = { message = it },
-                placeholder = { Text("Write Your Message...", color = Color.Gray) },
+                placeholder = { Text("Write Message...", color = Color.Gray) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(120.dp)
@@ -145,7 +160,24 @@ fun DirectChatScreen(navController: NavController) {
             Spacer(modifier = Modifier.height(20.dp))
 
             Button(
-                onClick = { },
+                onClick = {
+                    if (number.isNotBlank()) {
+                        val url =
+                            "https://wa.me/$selectedCode$number?text=${Uri.encode(message)}"
+                        val intent = Intent(Intent.ACTION_VIEW).apply {
+                            data = Uri.parse(url)
+                            setPackage("com.whatsapp")
+                        }
+                        try {
+                            context.startActivity(intent)
+                        } catch (e: Exception) {
+                            Toast.makeText(context, "WhatsApp not installed", Toast.LENGTH_SHORT)
+                                .show()
+                        }
+                    } else {
+                        Toast.makeText(context, "Enter Number", Toast.LENGTH_SHORT).show()
+                    }
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(50.dp)
@@ -157,6 +189,8 @@ fun DirectChatScreen(navController: NavController) {
         }
     }
 }
+
+
 
 @Composable
 fun CountryDropdown(onCountrySelected: (Int) -> Unit) {

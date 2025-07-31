@@ -1,6 +1,7 @@
 package com.example.whatsapp_status_saver_app.screens
 
 import android.content.Intent
+import android.net.Uri
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -141,7 +142,15 @@ fun HomeScreen(navController: NavController, countryCode: String?) {
                     icon = R.drawable.image_2
                 ) { navController.navigate(Screens.StatusScreen.route) }
 
-                SelectionWhats(title = "WhatsApp Web", icon = R.drawable.image_3) {}
+                SelectionWhats(
+                    title = "WhatsApp Web",
+                    icon = R.drawable.image_3
+                ) {
+                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://web.whatsapp.com"))
+                    context.startActivity(intent)
+
+                }
+
             }
         }
 

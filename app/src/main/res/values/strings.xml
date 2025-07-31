@@ -1,3 +1,14 @@
 <resources>
     <string name="app_name">WhatsApp_Status_Saver_App</string>
+    <string name="Status_Up">Status Up</string>
+    <string name="All_in_one_status_saver">All in one status saver</string>
+    <string name="WhatsApp">WhatsApp</string>
+    <string name="WhatsApp_Business">WhatsApp Business</string>
+    <string name="WhatsApp_Web">WhatsApp Web</string>
+    <string name="Direct_Chat">Direct Chat</string>
+    <string name="Saved_Files">Saved Files</string>
+    <string name="Rate_US">Rate US</string>
+    <string name="Share_App">Share App</string>
+    <string name="Privacy_Policy">Privacy Policy</string>
+
 </resources>
