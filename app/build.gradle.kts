@@ -63,6 +63,10 @@ dependencies {
 
     implementation(platform("androidx.compose:compose-bom:2025.01.00"))
     implementation("androidx.compose.material:material-icons-extended")
+    implementation("io.coil-kt:coil:2.4.0")
+    implementation("io.coil-kt:coil-compose:2.4.0")
+    implementation("io.coil-kt:coil-video:2.4.0")
+   
 
 
 }
