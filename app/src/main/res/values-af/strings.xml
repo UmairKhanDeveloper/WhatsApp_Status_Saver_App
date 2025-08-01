@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name" translatable="false">WhatsApp_Status_Saver_App</string>
+    <string name="Status_Up">Status Op</string>
+    <string name="All_in_one_status_saver">Alles-in-een status redder</string>
+    <string name="WhatsApp">WhatsApp</string>
+    <string name="WhatsApp_Business">WhatsApp Besigheid</string>
+    <string name="WhatsApp_Web">WhatsApp Web</string>
+    <string name="Direct_Chat">Direkte Klets</string>
+    <string name="Saved_Files">Gestoorde Lêers</string>
+    <string name="Rate_US">Gradeer Ons</string>
+    <string name="Share_App">Deel App</string>
+    <string name="Privacy_Policy">Privaatheidsbeleid</string>
+    <string name="Tell_us_how_was_your_experience_with_status_up_app">Jou mening maak saak vir ons!</string>
+    <string name="Rate_Us">Gradeer Ons</string>
+    <string name="Later">Later</string>
+    <string name="Enter_Number">Voer Nommer In</string>
+    <string name="Write_Message...">Skryf Boodskap...</string>
+    <string name="Send">Stuur</string>
+    <string name="View_Status">Bekyk Status</string>
+    <string name="Unsupported_File">Nie-ondersteunde Lêer</string>
+    <string name="File_not_found">Lêer nie gevind nie</string>
+    <string name="Share">Deel</string>
+    <string name="Download">Laai Af</string>
+    <string name="Status">Status</string>
+    <string name="No_Status_Found">Geen status gevind nie</string>
+    <string name="No_Preview">Geen voorskou</string>
+    <string name="Business">Besigheid</string>
+    <string name="Photos">Foto\'s</string>
+    <string name="Videos">Video\'s</string>
+    <string name="Your_Opinion_Matter_to_us">Jou mening maak saak vir ons!</string>
+
+</resources>

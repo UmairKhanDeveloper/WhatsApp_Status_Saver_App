@@ -1,14 +1,34 @@
 <resources>
-    <string name="app_name">WhatsApp_Status_Saver_App</string>
-    <string name="Status_Up">Status Up</string>
-    <string name="All_in_one_status_saver">All in one status saver</string>
-    <string name="WhatsApp">WhatsApp</string>
-    <string name="WhatsApp_Business">WhatsApp Business</string>
-    <string name="WhatsApp_Web">WhatsApp Web</string>
-    <string name="Direct_Chat">Direct Chat</string>
-    <string name="Saved_Files">Saved Files</string>
-    <string name="Rate_US">Rate US</string>
-    <string name="Share_App">Share App</string>
-    <string name="Privacy_Policy">Privacy Policy</string>
+    <string name="app_name" translatable="false">WhatsApp_Status_Saver_App</string>
+    <string name="Status_Up" translatable="false">Status Up</string>
+    <string name="All_in_one_status_saver" translatable="false">All in one status saver</string>
+    <string name="WhatsApp" translatable="false">WhatsApp</string>
+    <string name="WhatsApp_Business" translatable="false">WhatsApp Business</string>
+    <string name="WhatsApp_Web" translatable="false">WhatsApp Web</string>
+    <string name="Direct_Chat" translatable="false">Direct Chat</string>
+    <string name="Saved_Files" translatable="false">Saved Files</string>
+    <string name="Rate_US" translatable="false">Rate US</string>
+    <string name="Share_App" translatable="false">Share App</string>
+    <string name="Privacy_Policy" translatable="false">Privacy Policy</string>
+    <string name="Tell_us_how_was_your_experience_with_status_up_app" translatable="false">Your Opinion Matter to us!</string>
+    <string name="Rate_Us" translatable="false">Rate Us</string>
+    <string name="Later" translatable="false">Later</string>
+    <string name="Enter_Number" translatable="false">Enter Number</string>
+    <string name="Write_Message..." translatable="false">Write Message...</string>
+    <string name="Send" translatable="false">Send</string>
+    <string name="View_Status" translatable="false">View Status</string>
+    <string name="Unsupported_File" translatable="false">Unsupported File</string>
+    <string name="File_not_found" translatable="false">File not found</string>
+    <string name="Share" translatable="false">Share</string>
+    <string name="Download" translatable="false">Download</string>
+    <string name="Status" translatable="false">Status</string>
+    <string name="No_Status_Found" translatable="false">No Status Found</string>
+    <string name="No_Preview" translatable="false">No Preview</string>
+    <string name="Business" translatable="false">Business</string>
+    <string name="Photos" translatable="false">Photos</string>
+    <string name="Videos" translatable="false">Videos</string>
+    <string name="Your_Opinion_Matter_to_us" translatable="false">Your Opinion Matter to us!</string>
+
+
 
 </resources>

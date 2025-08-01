@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name" translatable="false">WhatsApp_Status_Saver_App</string>
+    <string name="Status_Up">اسٹیٹس اپ</string>
+    <string name="All_in_one_status_saver">آل اِن ون اسٹیٹس سیور</string>
+    <string name="WhatsApp">واٹس ایپ</string>
+    <string name="WhatsApp_Business">واٹس ایپ بزنس</string>
+    <string name="WhatsApp_Web">واٹس ایپ ویب</string>
+    <string name="Direct_Chat">براہِ راست چیٹ</string>
+    <string name="Saved_Files">محفوظ فائلز</string>
+    <string name="Rate_US">ہمیں ریٹ کریں</string>
+    <string name="Share_App">ایپ شیئر کریں</string>
+    <string name="Privacy_Policy">پرائیویسی پالیسی</string>
+    <string name="Tell_us_how_was_your_experience_with_status_up_app">آپ کی رائے ہمارے لیے اہم ہے!</string>
+    <string name="Rate_Us">ہمیں ریٹ کریں</string>
+    <string name="Later">بعد میں</string>
+    <string name="Enter_Number">نمبر درج کریں</string>
+    <string name="Write_Message...">پیغام لکھیں...</string>
+    <string name="Send">بھیجیں</string>
+    <string name="View_Status">اسٹیٹس دیکھیں</string>
+    <string name="Unsupported_File">ناموزوں فائل</string>
+    <string name="File_not_found">فائل نہیں ملی</string>
+    <string name="Share">شیئر کریں</string>
+    <string name="Download">ڈاؤن لوڈ کریں</string>
+    <string name="Status">اسٹیٹس</string>
+    <string name="No_Status_Found">کوئی اسٹیٹس نہیں ملا</string>
+    <string name="No_Preview">پیش منظر دستیاب نہیں</string>
+    <string name="Business">بزنس</string>
+    <string name="Photos">تصاویر</string>
+    <string name="Videos">ویڈیوز</string>
+    <string name="Your_Opinion_Matter_to_us">آپ کی رائے ہمارے لیے اہم ہے!</string>
+
+</resources>

@@ -47,11 +47,13 @@ import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.FileProvider
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
+import com.example.whatsapp_status_saver_app.R
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.File
@@ -64,7 +66,6 @@ fun SingleViewScreen(navController: NavController, filePath: String?) {
     val file = filePath?.let { File(it) }
     var thumbnail by remember { mutableStateOf<Bitmap?>(null) }
 
-    // Create share functions
     fun shareToWhatsApp() {
         file?.let {
             try {
@@ -149,7 +150,7 @@ fun SingleViewScreen(navController: NavController, filePath: String?) {
                             )
                         }
                         Spacer(Modifier.width(20.dp))
-                        Text("View Status", color = Color.Black, fontSize = 20.sp)
+                        Text(stringResource(id = R.string.View_Status), color = Color.Black, fontSize = 20.sp)
                     }
                 }
             )
@@ -208,10 +209,10 @@ fun SingleViewScreen(navController: NavController, filePath: String?) {
                             }
                         }
 
-                        else -> Text("Unsupported File", color = Color.Gray)
+                        else -> Text(stringResource(id = R.string.Unsupported_File), color = Color.Gray)
                     }
                 } else {
-                    Text("File not found", color = Color.Gray)
+                    Text(stringResource(id = R.string.File_not_found), color = Color.Gray)
                 }
             }
 
@@ -221,9 +222,9 @@ fun SingleViewScreen(navController: NavController, filePath: String?) {
                     .padding(vertical = 16.dp),
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
-                ActionIconButton(Icons.Default.Whatsapp, "WhatsApp") { shareToWhatsApp() }
-                ActionIconButton(Icons.Default.Share, "Share") { shareToAllApps() }
-                ActionIconButton(Icons.Default.Download, "Download") { /* download logic */ }
+                ActionIconButton(Icons.Default.Whatsapp, stringResource(id = R.string.WhatsApp)) { shareToWhatsApp() }
+                ActionIconButton(Icons.Default.Share, stringResource(id = R.string.Share)) { shareToAllApps() }
+                ActionIconButton(Icons.Default.Download, stringResource(id = R.string.Download)) { }
             }
         }
     }

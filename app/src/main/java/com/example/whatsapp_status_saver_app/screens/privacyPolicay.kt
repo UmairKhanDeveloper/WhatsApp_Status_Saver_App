@@ -17,10 +17,12 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.navigation.NavController
+import com.example.whatsapp_status_saver_app.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -33,7 +35,7 @@ fun PrivacyPolicy(navController: NavController) {
             TopAppBar(
                 title = {
                     Text(
-                        text = "Privacy Policy",
+                        text = stringResource(id = R.string.Privacy_Policy),
                         color = Color.White,
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Medium

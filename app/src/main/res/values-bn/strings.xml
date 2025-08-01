@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name" translatable="false">WhatsApp_Status_Saver_App</string>
+    <string name="Status_Up">স্ট্যাটাস আপ</string>
+    <string name="All_in_one_status_saver">সব-একটিতে স্ট্যাটাস সেভার</string>
+    <string name="WhatsApp">হোয়াটসঅ্যাপ</string>
+    <string name="WhatsApp_Business">হোয়াটসঅ্যাপ বিজনেস</string>
+    <string name="WhatsApp_Web">হোয়াটসঅ্যাপ ওয়েব</string>
+    <string name="Direct_Chat">সরাসরি চ্যাট</string>
+    <string name="Saved_Files">সংরক্ষিত ফাইল</string>
+    <string name="Rate_US">আমাদের রেট দিন</string>
+    <string name="Share_App">অ্যাপ শেয়ার করুন</string>
+    <string name="Privacy_Policy">গোপনীয়তা নীতি</string>
+    <string name="Tell_us_how_was_your_experience_with_status_up_app">আপনার মতামত আমাদের জন্য গুরুত্বপূর্ণ!</string>
+    <string name="Rate_Us">আমাদের রেট দিন</string>
+    <string name="Later">পরে</string>
+    <string name="Enter_Number">নম্বর লিখুন</string>
+    <string name="Write_Message...">বার্তা লিখুন...</string>
+    <string name="Send">পাঠান</string>
+    <string name="View_Status">স্ট্যাটাস দেখুন</string>
+    <string name="Unsupported_File">অসমর্থিত ফাইল</string>
+    <string name="File_not_found">ফাইল পাওয়া যায়নি</string>
+    <string name="Share">শেয়ার করুন</string>
+    <string name="Download">ডাউনলোড করুন</string>
+    <string name="Status">স্ট্যাটাস</string>
+    <string name="No_Status_Found">কোন স্ট্যাটাস পাওয়া যায়নি</string>
+    <string name="No_Preview">কোন প্রিভিউ নেই</string>
+    <string name="Business">ব্যবসা</string>
+    <string name="Photos">ছবিসমূহ</string>
+    <string name="Videos">ভিডিওসমূহ</string>
+    <string name="Your_Opinion_Matter_to_us">আপনার মতামত আমাদের কাছে গুরুত্বপূর্ণ!</string>
+
+</resources>

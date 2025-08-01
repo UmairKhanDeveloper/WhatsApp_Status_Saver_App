@@ -33,10 +33,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.whatsapp_status_saver_app.R
+import java.util.Locale
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
@@ -46,20 +49,20 @@ fun LanguageSelectionScreen(navController: NavController) {
     val prefsManager = remember { SharedPrefsManager(context) }
 
     val languages = listOf(
-        Language("English", "GB"),
-        Language("اردو", "PK"),
-        Language("Afrikaans", "ZA"),
-        Language("Arabic", "SA"),
-        Language("Bulgarian", "BG"),
-        Language("Bangla", "BD"),
-        Language("Bosnian", "BA")
+        Language("English", "GB", "en"),
+        Language("اردو", "PK", "ur"),
+        Language("Afrikaans", "ZA", "af"),
+        Language("Arabic", "SA", "ar"),
+        Language("Bulgarian", "BG", "bg"),
+        Language("Bangla", "BD", "bn"),
+        Language("Bosnian", "BA", "bs")
     )
 
     var selectedCountryCode by remember {
         mutableStateOf(prefsManager.getString("selectedCountryCode", "GB") ?: "GB")
     }
-    var selectedLanguage by remember {
-        mutableStateOf(languages.find { it.countryCode == selectedCountryCode }?.name ?: "English")
+    var selectedLanguageCode by remember {
+        mutableStateOf(prefsManager.getString("selectedLanguageCode", "en") ?: "en")
     }
 
     Scaffold(
@@ -67,7 +70,7 @@ fun LanguageSelectionScreen(navController: NavController) {
             TopAppBar(
                 title = {
                     Text(
-                        text = "Select Language",
+                        text ="select_language",
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Bold
                     )
@@ -92,8 +95,8 @@ fun LanguageSelectionScreen(navController: NavController) {
                         modifier = Modifier
                             .fillMaxWidth()
                             .clickable {
-                                selectedLanguage = language.name
                                 selectedCountryCode = language.countryCode
+                                selectedLanguageCode = language.languageCode
                             }
                             .padding(vertical = 12.dp),
                         verticalAlignment = Alignment.CenterVertically
@@ -111,8 +114,8 @@ fun LanguageSelectionScreen(navController: NavController) {
                         RadioButton(
                             selected = selectedCountryCode == language.countryCode,
                             onClick = {
-                                selectedLanguage = language.name
                                 selectedCountryCode = language.countryCode
+                                selectedLanguageCode = language.languageCode
                             },
                             colors = RadioButtonDefaults.colors(
                                 selectedColor = Color(0xFF00C3A6)
@@ -127,6 +130,9 @@ fun LanguageSelectionScreen(navController: NavController) {
                 onClick = {
                     prefsManager.saveBoolean("isLanguageSelected", true)
                     prefsManager.saveString("selectedCountryCode", selectedCountryCode)
+                    prefsManager.saveString("selectedLanguageCode", selectedLanguageCode)
+
+                    setLocale(context, selectedLanguageCode)
 
                     navController.navigate(Screens.HomeScreen.route + "/$selectedCountryCode") {
                         popUpTo(Screens.LanguageSelectionScreen.route) { inclusive = true }
@@ -151,16 +157,22 @@ fun LanguageSelectionScreen(navController: NavController) {
     }
 }
 
-
-data class Language(val name: String, val countryCode: String)
+data class Language(val name: String, val countryCode: String, val languageCode: String)
 
 fun countryCodeToFlag(countryCode: String): String {
     return countryCode.uppercase()
         .map { char ->
-            Character.toChars(char.code + 0x1F1A5).concatToString()
+            Character.toChars(char.code + 0x1F1E6 - 'A'.code).concatToString()
         }.joinToString("")
 }
 
+fun setLocale(context: Context, languageCode: String) {
+    val locale = Locale(languageCode)
+    Locale.setDefault(locale)
+    val config = context.resources.configuration
+    config.setLocale(locale)
+    context.resources.updateConfiguration(config, context.resources.displayMetrics)
+}
 
 class SharedPrefsManager(context: Context) {
     private val prefs = context.getSharedPreferences("prefs", Context.MODE_PRIVATE)
@@ -181,4 +193,3 @@ class SharedPrefsManager(context: Context) {
         return prefs.getString(key, defaultValue)
     }
 }
-

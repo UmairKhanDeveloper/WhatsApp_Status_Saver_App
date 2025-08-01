@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name" translatable="false">WhatsApp_Status_Saver_App</string>
+    <string name="Status_Up">حالة أعلى</string>
+    <string name="All_in_one_status_saver">حافظ جميع الحالات في تطبيق واحد</string>
+    <string name="WhatsApp">واتساب</string>
+    <string name="WhatsApp_Business">واتساب للأعمال</string>
+    <string name="WhatsApp_Web">واتساب ويب</string>
+    <string name="Direct_Chat">دردشة مباشرة</string>
+    <string name="Saved_Files">الملفات المحفوظة</string>
+    <string name="Rate_US">قيّمنا</string>
+    <string name="Share_App">شارك التطبيق</string>
+    <string name="Privacy_Policy">سياسة الخصوصية</string>
+    <string name="Tell_us_how_was_your_experience_with_status_up_app">رأيك يهمنا!</string>
+    <string name="Rate_Us">قيّمنا</string>
+    <string name="Later">لاحقاً</string>
+    <string name="Enter_Number">أدخل الرقم</string>
+    <string name="Write_Message...">اكتب رسالة...</string>
+    <string name="Send">إرسال</string>
+    <string name="View_Status">عرض الحالة</string>
+    <string name="Unsupported_File">ملف غير مدعوم</string>
+    <string name="File_not_found">الملف غير موجود</string>
+    <string name="Share">مشاركة</string>
+    <string name="Download">تحميل</string>
+    <string name="Status">الحالة</string>
+    <string name="No_Status_Found">لم يتم العثور على حالة</string>
+    <string name="No_Preview">لا توجد معاينة</string>
+    <string name="Business">الأعمال</string>
+    <string name="Photos">الصور</string>
+    <string name="Videos">الفيديوهات</string>
+    <string name="Your_Opinion_Matter_to_us">رأيك يهمنا!</string>
+</resources>

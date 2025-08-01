@@ -56,10 +56,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
+import com.example.whatsapp_status_saver_app.R
 import java.io.File
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -67,7 +69,7 @@ import java.io.File
 fun StatusScreen(navController: NavController) {
     val context = LocalContext.current
     var selectedTabIndex by remember { mutableStateOf(0) }
-    val tabTitles = listOf("Photos", "Videos")
+    val tabTitles = listOf(stringResource(id = R.string.Photos), stringResource(id = R.string.Videos))
     var selectedApp by remember { mutableStateOf("WhatsApp") }
     var statusFiles by remember { mutableStateOf(listOf<File>()) }
     var permissionGranted by remember { mutableStateOf(false) }
@@ -134,7 +136,7 @@ fun StatusScreen(navController: NavController) {
                             )
                         }
                         Spacer(Modifier.width(20.dp))
-                        Text("Status", color = Color.Black, fontSize = 20.sp)
+                        Text(stringResource(id = R.string.Status), color = Color.Black, fontSize = 20.sp)
                     }
                 },
                 title = {}
@@ -185,7 +187,7 @@ fun StatusScreen(navController: NavController) {
 
             if (filteredFiles.isEmpty()) {
                 Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    Text("No Status Found", color = Color.Gray)
+                    Text(stringResource(id = R.string.No_Status_Found), color = Color.Gray)
                 }
             } else {
                 LazyVerticalGrid(
@@ -194,7 +196,6 @@ fun StatusScreen(navController: NavController) {
                 ) {
                     items(filteredFiles) { file ->
                         if (selectedTabIndex == 0) {
-                            // Photos
                             AsyncImage(
                                 model = file,
                                 contentDescription = null,
@@ -211,7 +212,6 @@ fun StatusScreen(navController: NavController) {
                                     }
                             )
                         } else {
-                            // Videos
                             VideoThumbnail(
                                 file = file,
                                 onClick = {
@@ -270,7 +270,7 @@ fun VideoThumbnail(file: File, onClick: () -> Unit) {
                 .background(Color.Gray),
             contentAlignment = Alignment.Center
         ) {
-            Text("No Preview", color = Color.White, fontSize = 12.sp)
+            Text(stringResource(id = R.string.No_Preview), color = Color.White, fontSize = 12.sp)
         }
 
         Icon(
@@ -305,7 +305,7 @@ fun WhatsAppToggle(
     selectedOption: String,
     onOptionSelected: (String) -> Unit
 ) {
-    val options = listOf("WhatsApp", "Business")
+    val options = listOf(stringResource(id = R.string.WhatsApp), stringResource(id = R.string.Business))
 
     Row(
         modifier = Modifier.padding(10.dp)

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name" translatable="false">WhatsApp_Status_Saver_App</string>
+    <string name="Status_Up">Status Gore</string>
+    <string name="All_in_one_status_saver">Sve-u-jednom čuvar statusa</string>
+    <string name="WhatsApp">WhatsApp</string>
+    <string name="WhatsApp_Business">WhatsApp Poslovni</string>
+    <string name="WhatsApp_Web">WhatsApp Web</string>
+    <string name="Direct_Chat">Direktan Chat</string>
+    <string name="Saved_Files">Spremljene Datoteke</string>
+    <string name="Rate_US">Ocijenite Nas</string>
+    <string name="Share_App">Podijeli Aplikaciju</string>
+    <string name="Privacy_Policy">Politika Privatnosti</string>
+    <string name="Tell_us_how_was_your_experience_with_status_up_app">Vaše mišljenje nam je važno!</string>
+    <string name="Rate_Us">Ocijenite Nas</string>
+    <string name="Later">Kasnije</string>
+    <string name="Enter_Number">Unesite Broj</string>
+    <string name="Write_Message...">Napišite Poruku...</string>
+    <string name="Send">Pošalji</string>
+    <string name="View_Status">Pogledaj Status</string>
+    <string name="Unsupported_File">Nepodržana Datoteka</string>
+    <string name="File_not_found">Datoteka Nije Pronađena</string>
+    <string name="Share">Podijeli</string>
+    <string name="Download">Preuzmi</string>
+    <string name="Status">Status</string>
+    <string name="No_Status_Found">Nije Pronađen Status</string>
+    <string name="No_Preview">Nema Pregleda</string>
+    <string name="Business">Poslovni</string>
+    <string name="Photos">Fotografije</string>
+    <string name="Videos">Videozapisi</string>
+    <string name="Your_Opinion_Matter_to_us">Vaše mišljenje nam je važno!</string>
+
+</resources>

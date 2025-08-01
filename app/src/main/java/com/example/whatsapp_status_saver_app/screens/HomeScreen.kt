@@ -43,6 +43,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -79,14 +80,14 @@ fun HomeScreen(navController: NavController, countryCode: String?) {
                     horizontalAlignment = Alignment.Start
                 ) {
                     Text(
-                        text = "Status Up",
+                        text = stringResource(id = R.string.Status_Up),
                         color = Color.White,
                         fontSize = 24.sp,
                         fontWeight = FontWeight.Medium
                     )
                     Spacer(modifier = Modifier.height(6.dp))
                     Text(
-                        text = "All in one status saver",
+                        text = stringResource(id = R.string.All_in_one_status_saver),
                         color = Color.White,
                         fontSize = 16.sp,
                         fontWeight = FontWeight.Light
@@ -133,17 +134,17 @@ fun HomeScreen(navController: NavController, countryCode: String?) {
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 SelectionWhats(
-                    title = "WhatsApp",
+                    title =stringResource(id = R.string.WhatsApp),
                     icon = R.drawable.image_1
                 ) { navController.navigate(Screens.StatusScreen.route) }
 
                 SelectionWhats(
-                    title = "WhatsApp Business",
+                    title = stringResource(id = R.string.WhatsApp_Business),
                     icon = R.drawable.image_2
                 ) { navController.navigate(Screens.StatusScreen.route) }
 
                 SelectionWhats(
-                    title = "WhatsApp Web",
+                    title = stringResource(id = R.string.WhatsApp_Web),
                     icon = R.drawable.image_3
                 ) {
                     val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://web.whatsapp.com"))
@@ -163,10 +164,10 @@ fun HomeScreen(navController: NavController, countryCode: String?) {
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
             CardItem(
-                title = "Direct Chat",
+                title = stringResource(id = R.string.Direct_Chat),
                 icon = R.drawable.telegramlogo
             ) { navController.navigate(Screens.DirectChatScreen.route) }
-            CardItem(title = "Saved Files", icon = R.drawable.folder) {}
+            CardItem(title = stringResource(id = R.string.Saved_Files), icon = R.drawable.folder) {}
         }
 
         Card(
@@ -187,10 +188,10 @@ fun HomeScreen(navController: NavController, countryCode: String?) {
                 horizontalArrangement = Arrangement.SpaceEvenly,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                SettingItem(title = "Rate US", icon = R.drawable.star) {
+                SettingItem(title = stringResource(id = R.string.Rate_US), icon = R.drawable.star) {
                     showRateUsDialog = true
                 }
-                SettingItem(title = "Share App", icon = R.drawable.share) {
+                SettingItem(title = stringResource(id = R.string.Share_App), icon = R.drawable.share) {
                     val sendIntent = Intent().apply {
                         action = Intent.ACTION_SEND
                         putExtra(
@@ -203,7 +204,7 @@ fun HomeScreen(navController: NavController, countryCode: String?) {
                     context.startActivity(shareIntent)
                 }
 
-                SettingItem(title = "Privacy Policy", icon = R.drawable.shield) {
+                SettingItem(title = stringResource(id = R.string.Privacy_Policy), icon = R.drawable.shield) {
                     navController.navigate(Screens.PrivacyPolicy.route)
                 }
             }
@@ -258,7 +259,7 @@ fun RateUsDialogContent(onRateClick: () -> Unit, onLaterClick: () -> Unit) {
         Spacer(modifier = Modifier.height(4.dp))
 
         Text(
-            text = "Tell us how was your experience with status up app?",
+            text = stringResource(id = R.string.Tell_us_how_was_your_experience_with_status_up_app),
             fontSize = 14.sp,
             color = Color.Gray,
             textAlign = TextAlign.Center
@@ -291,13 +292,13 @@ fun RateUsDialogContent(onRateClick: () -> Unit, onLaterClick: () -> Unit) {
                 .clip(RoundedCornerShape(25.dp)),
             colors = ButtonDefaults.buttonColors(containerColor = Color(0XFF039840))
         ) {
-            Text("Rate Us", color = Color.White, fontSize = 16.sp, fontWeight = FontWeight.Bold)
+            Text(stringResource(id = R.string.Rate_Us), color = Color.White, fontSize = 16.sp, fontWeight = FontWeight.Bold)
         }
 
         Spacer(modifier = Modifier.height(12.dp))
 
         Text(
-            text = "Later",
+            text = stringResource(id = R.string.Later),
             color = Color.Gray, fontSize = 24.sp,
             modifier = Modifier.clickable { onLaterClick() }
         )

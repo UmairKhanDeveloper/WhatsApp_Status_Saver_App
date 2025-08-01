@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name" translatable="false">WhatsApp_Status_Saver_App</string>
+    <string name="Status_Up">Статус нагоре</string>
+    <string name="All_in_one_status_saver">Всичко в едно запазване на статус</string>
+    <string name="WhatsApp">WhatsApp</string>
+    <string name="WhatsApp_Business">WhatsApp Бизнес</string>
+    <string name="WhatsApp_Web">WhatsApp Уеб</string>
+    <string name="Direct_Chat">Директен чат</string>
+    <string name="Saved_Files">Запазени файлове</string>
+    <string name="Rate_US">Оценете ни</string>
+    <string name="Share_App">Сподели приложението</string>
+    <string name="Privacy_Policy">Политика за поверителност</string>
+    <string name="Tell_us_how_was_your_experience_with_status_up_app">Вашето мнение е важно за нас!</string>
+    <string name="Rate_Us">Оценете ни</string>
+    <string name="Later">По-късно</string>
+    <string name="Enter_Number">Въведете номер</string>
+    <string name="Write_Message...">Напишете съобщение...</string>
+    <string name="Send">Изпрати</string>
+    <string name="View_Status">Виж статус</string>
+    <string name="Unsupported_File">Неподдържан файл</string>
+    <string name="File_not_found">Файлът не е намерен</string>
+    <string name="Share">Сподели</string>
+    <string name="Download">Изтегли</string>
+    <string name="Status">Статус</string>
+    <string name="No_Status_Found">Няма намерен статус</string>
+    <string name="No_Preview">Няма визуализация</string>
+    <string name="Business">Бизнес</string>
+    <string name="Photos">Снимки</string>
+    <string name="Videos">Видеа</string>
+    <string name="Your_Opinion_Matter_to_us">Вашето мнение е важно за нас!</string>
+</resources>

@@ -44,11 +44,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.whatsapp_status_saver_app.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -84,7 +86,7 @@ fun DirectChatScreen(navController: NavController) {
                         }
                         Spacer(modifier = Modifier.width(20.dp))
                         Text(
-                            text = "Direct Chat",
+                            text = stringResource(id = R.string.Direct_Chat),
                             color = Color.Black,
                             fontSize = 20.sp,
                             fontWeight = FontWeight.Medium
@@ -117,7 +119,7 @@ fun DirectChatScreen(navController: NavController) {
                 onValueChange = { input ->
                     number = input.filter { it.isDigit() }
                 },
-                placeholder = { Text("Enter Number", color = Color.Gray) },
+                placeholder = { Text(stringResource(id = R.string.Enter_Number), color = Color.Gray) },
                 leadingIcon = {
                     Text(
                         text = "+$selectedCode",
@@ -144,7 +146,7 @@ fun DirectChatScreen(navController: NavController) {
             OutlinedTextField(
                 value = message,
                 onValueChange = { message = it },
-                placeholder = { Text("Write Message...", color = Color.Gray) },
+                placeholder = { Text(stringResource(id = R.string.Write_Message___), color = Color.Gray) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(120.dp)
@@ -184,7 +186,7 @@ fun DirectChatScreen(navController: NavController) {
                     .clip(RoundedCornerShape(25.dp)),
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0XFF039840))
             ) {
-                Text("Send", color = Color.White, fontSize = 16.sp, fontWeight = FontWeight.Bold)
+                Text(stringResource(id = R.string.Send), color = Color.White, fontSize = 16.sp, fontWeight = FontWeight.Bold)
             }
         }
     }
