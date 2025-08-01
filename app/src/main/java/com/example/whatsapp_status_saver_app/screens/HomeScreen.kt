@@ -134,7 +134,7 @@ fun HomeScreen(navController: NavController, countryCode: String?) {
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 SelectionWhats(
-                    title =stringResource(id = R.string.WhatsApp),
+                    title = stringResource(id = R.string.WhatsApp),
                     icon = R.drawable.image_1
                 ) { navController.navigate(Screens.StatusScreen.route) }
 
@@ -167,7 +167,9 @@ fun HomeScreen(navController: NavController, countryCode: String?) {
                 title = stringResource(id = R.string.Direct_Chat),
                 icon = R.drawable.telegramlogo
             ) { navController.navigate(Screens.DirectChatScreen.route) }
-            CardItem(title = stringResource(id = R.string.Saved_Files), icon = R.drawable.folder) {}
+            CardItem(title = stringResource(id = R.string.Saved_Files), icon = R.drawable.folder) {
+                navController.navigate(Screens.DownloadScreen.route)
+            }
         }
 
         Card(
@@ -191,7 +193,10 @@ fun HomeScreen(navController: NavController, countryCode: String?) {
                 SettingItem(title = stringResource(id = R.string.Rate_US), icon = R.drawable.star) {
                     showRateUsDialog = true
                 }
-                SettingItem(title = stringResource(id = R.string.Share_App), icon = R.drawable.share) {
+                SettingItem(
+                    title = stringResource(id = R.string.Share_App),
+                    icon = R.drawable.share
+                ) {
                     val sendIntent = Intent().apply {
                         action = Intent.ACTION_SEND
                         putExtra(
@@ -204,7 +209,10 @@ fun HomeScreen(navController: NavController, countryCode: String?) {
                     context.startActivity(shareIntent)
                 }
 
-                SettingItem(title = stringResource(id = R.string.Privacy_Policy), icon = R.drawable.shield) {
+                SettingItem(
+                    title = stringResource(id = R.string.Privacy_Policy),
+                    icon = R.drawable.shield
+                ) {
                     navController.navigate(Screens.PrivacyPolicy.route)
                 }
             }
@@ -292,7 +300,12 @@ fun RateUsDialogContent(onRateClick: () -> Unit, onLaterClick: () -> Unit) {
                 .clip(RoundedCornerShape(25.dp)),
             colors = ButtonDefaults.buttonColors(containerColor = Color(0XFF039840))
         ) {
-            Text(stringResource(id = R.string.Rate_Us), color = Color.White, fontSize = 16.sp, fontWeight = FontWeight.Bold)
+            Text(
+                stringResource(id = R.string.Rate_Us),
+                color = Color.White,
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Bold
+            )
         }
 
         Spacer(modifier = Modifier.height(12.dp))

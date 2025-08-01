@@ -1,10 +1,13 @@
 package com.example.whatsapp_status_saver_app.screens
 
 import android.annotation.SuppressLint
+import android.app.DownloadManager
+import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.media.MediaMetadataRetriever
 import android.net.Uri
+import android.os.Environment
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -30,12 +33,14 @@ import androidx.compose.material.icons.filled.Whatsapp
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -51,9 +56,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.FileProvider
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.whatsapp_status_saver_app.R
+import com.example.whatsapp_status_saver_app.dp.MainViewModel
+import com.example.whatsapp_status_saver_app.dp.Repository
+import com.example.whatsapp_status_saver_app.dp.StatusDataBase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.File
@@ -63,53 +72,53 @@ import java.io.File
 @Composable
 fun SingleViewScreen(navController: NavController, filePath: String?) {
     val context = LocalContext.current
+    val statusDataBase = remember { StatusDataBase.getDataBase(context) }
+    val repository = remember { Repository(statusDataBase) }
+    val viewModel = remember { MainViewModel(repository) }
+
     val file = filePath?.let { File(it) }
     var thumbnail by remember { mutableStateOf<Bitmap?>(null) }
 
-    fun shareToWhatsApp() {
+    fun downloadStatus() {
         file?.let {
             try {
-                val uri = FileProvider.getUriForFile(
-                    context,
-                    "${context.packageName}.provider",
-                    it
+                val downloadsDir = File(
+                    Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),
+                    "StatusSaver"
                 )
-                val intent = Intent(Intent.ACTION_SEND).apply {
-                    type = when (it.extension.lowercase()) {
-                        "jpg", "jpeg", "png", "webp" -> "image/*"
-                        "mp4", "3gp" -> "video/*"
-                        else -> "*/*"
-                    }
-                    putExtra(Intent.EXTRA_STREAM, uri)
-                    setPackage("com.whatsapp")
-                    addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                }
-                context.startActivity(intent)
+                if (!downloadsDir.exists()) downloadsDir.mkdirs()
+
+                val destFile = File(downloadsDir, it.name)
+                it.copyTo(destFile, overwrite = true)
+
+                val type = if (it.extension.lowercase() in listOf("jpg", "jpeg", "png", "webp")) "image" else "video"
+                viewModel.insert(destFile.absolutePath, type)
+
+                val dm = context.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
+                val uri = Uri.fromFile(destFile)
+
+                val request = DownloadManager.Request(uri)
+                    .setTitle(destFile.name)
+                    .setDescription("Saved to Downloads/StatusSaver")
+                    .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED) // ✅ Show notification
+                    .setAllowedOverMetered(true)
+                    .setAllowedOverRoaming(true)
+
+                request.setDestinationInExternalPublicDir(
+                    Environment.DIRECTORY_DOWNLOADS + "/StatusSaver",
+                    destFile.name
+                )
+
+                dm.enqueue(request)
+
+                Toast.makeText(context, "Status saved successfully", Toast.LENGTH_SHORT).show()
             } catch (e: Exception) {
-                Toast.makeText(context, "WhatsApp not installed", Toast.LENGTH_SHORT).show()
+                e.printStackTrace()
+                Toast.makeText(context, "Download failed", Toast.LENGTH_SHORT).show()
             }
         }
     }
 
-    fun shareToAllApps() {
-        file?.let {
-            val uri = FileProvider.getUriForFile(
-                context,
-                "${context.packageName}.provider",
-                it
-            )
-            val intent = Intent(Intent.ACTION_SEND).apply {
-                type = when (it.extension.lowercase()) {
-                    "jpg", "jpeg", "png", "webp" -> "image/*"
-                    "mp4", "3gp" -> "video/*"
-                    else -> "*/*"
-                }
-                putExtra(Intent.EXTRA_STREAM, uri)
-                addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-            }
-            context.startActivity(Intent.createChooser(intent, "Share via"))
-        }
-    }
 
     LaunchedEffect(file?.path) {
         if (file != null && file.extension.lowercase() in listOf("mp4", "3gp")) {
@@ -129,38 +138,20 @@ fun SingleViewScreen(navController: NavController, filePath: String?) {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = {},
+                title = { Text(stringResource(id = R.string.View_Status)) },
                 navigationIcon = {
-                    Row(
-                        modifier = Modifier.padding(start = 10.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Box(
-                            modifier = Modifier
-                                .clickable { navController.popBackStack() }
-                                .clip(RoundedCornerShape(10.dp))
-                                .size(32.dp)
-                                .background(Color(0XFF039840).copy(alpha = 0.1f)),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Icon(
-                                Icons.Default.KeyboardArrowLeft,
-                                contentDescription = "Back",
-                                tint = Color(0XFF039840)
-                            )
-                        }
-                        Spacer(Modifier.width(20.dp))
-                        Text(stringResource(id = R.string.View_Status), color = Color.Black, fontSize = 20.sp)
+                    IconButton(onClick = { navController.popBackStack() }) {
+                        Icon(Icons.Default.KeyboardArrowLeft, contentDescription = "Back")
                     }
                 }
             )
         }
     ) {
-
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(top = it.calculateTopPadding(), bottom = 80.dp),
+                .padding(it)
+                .padding(bottom = 80.dp),
             verticalArrangement = Arrangement.SpaceBetween,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -174,22 +165,11 @@ fun SingleViewScreen(navController: NavController, filePath: String?) {
                 if (file != null && file.exists()) {
                     when (file.extension.lowercase()) {
                         in listOf("jpg", "jpeg", "png", "webp") -> {
-                            AsyncImage(
-                                model = file,
-                                contentDescription = "Full Image",
-                                modifier = Modifier.fillMaxSize(),
-                                contentScale = ContentScale.Fit
-                            )
+                            AsyncImage(model = file, contentDescription = null, modifier = Modifier.fillMaxSize(), contentScale = ContentScale.Fit)
                         }
-
                         in listOf("mp4", "3gp") -> {
                             if (thumbnail != null) {
-                                Image(
-                                    bitmap = thumbnail!!.asImageBitmap(),
-                                    contentDescription = "Video Thumbnail",
-                                    modifier = Modifier.fillMaxSize(),
-                                    contentScale = ContentScale.FillWidth
-                                )
+                                Image(bitmap = thumbnail!!.asImageBitmap(), contentDescription = null, modifier = Modifier.fillMaxSize())
                                 Icon(
                                     Icons.Default.PlayArrow,
                                     contentDescription = "Play Video",
@@ -199,32 +179,24 @@ fun SingleViewScreen(navController: NavController, filePath: String?) {
                                         .background(Color.Black.copy(alpha = 0.5f), CircleShape)
                                         .padding(8.dp)
                                         .clickable {
-                                            navController.navigate(
-                                                Screens.ExoPlayer.route + "/${Uri.encode(file.absolutePath)}"
-                                            )
+                                            navController.navigate(Screens.ExoPlayer.route + "/${Uri.encode(file.absolutePath)}")
                                         }
                                 )
-                            } else {
-                                CircularProgressIndicator()
-                            }
+                            } else CircularProgressIndicator()
                         }
-
                         else -> Text(stringResource(id = R.string.Unsupported_File), color = Color.Gray)
                     }
                 } else {
                     Text(stringResource(id = R.string.File_not_found), color = Color.Gray)
                 }
             }
-
             Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 16.dp),
+                modifier = Modifier.fillMaxWidth().padding(vertical = 16.dp),
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
-                ActionIconButton(Icons.Default.Whatsapp, stringResource(id = R.string.WhatsApp)) { shareToWhatsApp() }
-                ActionIconButton(Icons.Default.Share, stringResource(id = R.string.Share)) { shareToAllApps() }
-                ActionIconButton(Icons.Default.Download, stringResource(id = R.string.Download)) { }
+                ActionIconButton(Icons.Default.Whatsapp, "WhatsApp") {  }
+                ActionIconButton(Icons.Default.Share, "Share") {}
+                ActionIconButton(Icons.Default.Download, "Download") { downloadStatus() }
             }
         }
     }

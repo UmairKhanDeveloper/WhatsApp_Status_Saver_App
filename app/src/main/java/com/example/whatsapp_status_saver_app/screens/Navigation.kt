@@ -47,8 +47,9 @@ fun Navigation(navController: NavHostController) {
             ExoPlayerScreen(navController, filePath)
         }
 
-
-
+        composable(Screens.DownloadScreen.route) {
+            DownloadScreen(navController)
+        }
 
 
     }
@@ -102,9 +103,16 @@ sealed class Screens(
         "PrivacyPolicy",
         Icon = Icons.Filled.Add,
     )
+
     object ExoPlayer : Screens(
         "ExoPlayer",
         "ExoPlayer",
+        Icon = Icons.Filled.Add,
+    )
+
+    object DownloadScreen : Screens(
+        "DownloadScreen",
+        "DownloadScreen",
         Icon = Icons.Filled.Add,
     )
 
