@@ -5,7 +5,6 @@ import androidx.lifecycle.LiveData
 
 class Repository(private val statusDataBase: StatusDataBase) {
 
-
     fun getAllDownloads(): LiveData<List<StatusDownload>> =
         statusDataBase.getDao().getAllDownloads()
 
@@ -15,5 +14,9 @@ class Repository(private val statusDataBase: StatusDataBase) {
 
     suspend fun delete(statusDownload: StatusDownload) {
         statusDataBase.getDao().delete(statusDownload)
+    }
+
+    suspend fun deleteAll() {
+        statusDataBase.getDao().deleteAll()
     }
 }

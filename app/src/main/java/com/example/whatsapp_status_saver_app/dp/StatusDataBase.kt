@@ -19,7 +19,7 @@ abstract class StatusDataBase : RoomDatabase() {
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
                     StatusDataBase::class.java,
-                    "status_database" // ✅ Correct name
+                    "status_database"
                 ).build()
                 INSTANCE = instance
                 instance

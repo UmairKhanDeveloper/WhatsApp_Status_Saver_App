@@ -17,7 +17,9 @@ interface StatusDownloadDao {
     @Delete
     suspend fun delete(statusDownload: StatusDownload)
 
-
     @Query("SELECT * FROM statusdownload ORDER BY timeStamp DESC")
     fun getAllDownloads(): LiveData<List<StatusDownload>>
+
+    @Query("DELETE FROM statusdownload")
+    suspend fun deleteAll()
 }
