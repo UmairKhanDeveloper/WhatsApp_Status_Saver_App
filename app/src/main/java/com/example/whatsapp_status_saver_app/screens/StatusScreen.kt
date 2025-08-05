@@ -1,17 +1,10 @@
 package com.example.whatsapp_status_saver_app.screens
 
-import android.Manifest
-import android.content.Intent
 import android.media.ThumbnailUtils
 import android.net.Uri
 import android.os.Build
-import android.os.Environment
 import android.provider.MediaStore
-import android.provider.Settings
 import android.util.Size
-import android.widget.Toast
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -57,60 +50,28 @@ import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.whatsapp_status_saver_app.R
+import kotlinx.coroutines.delay
 import java.io.File
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun StatusScreen(navController: NavController) {
-    val context = LocalContext.current
+fun StatusScreen(navController: NavController, appType: String?) {
     var selectedTabIndex by remember { mutableStateOf(0) }
     val tabTitles = listOf(stringResource(id = R.string.Photos), stringResource(id = R.string.Videos))
-    var selectedApp by remember { mutableStateOf("WhatsApp") }
+
+    var selectedApp by remember { mutableStateOf(appType ?: "WhatsApp") }
+
     var statusFiles by remember { mutableStateOf(listOf<File>()) }
-    var permissionGranted by remember { mutableStateOf(false) }
 
-    val permissionLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.RequestMultiplePermissions()
-    ) { perms ->
-        if (perms.values.all { it }) {
-            permissionGranted = true
-        } else {
-            Toast.makeText(context, "Permission Required!", Toast.LENGTH_SHORT).show()
-        }
-    }
-
-    LaunchedEffect(Unit) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            if (!Environment.isExternalStorageManager()) {
-                val intent = Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION)
-                    .setData(Uri.parse("package:${context.packageName}"))
-                context.startActivity(intent)
-            } else {
-                permissionGranted = true
-            }
-        } else {
-            permissionLauncher.launch(
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                    arrayOf(
-                        Manifest.permission.READ_MEDIA_IMAGES,
-                        Manifest.permission.READ_MEDIA_VIDEO
-                    )
-                } else {
-                    arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE)
-                }
-            )
-        }
-    }
-
-    LaunchedEffect(permissionGranted, selectedApp) {
-        if (permissionGranted) {
-            statusFiles = loadStatuses(selectedApp)
-        }
+    LaunchedEffect(selectedApp) {
+        delay(100)
+        statusFiles = loadStatuses(selectedApp)
     }
 
     Scaffold(
@@ -144,7 +105,6 @@ fun StatusScreen(navController: NavController) {
         }
     ) {
         Column(Modifier.padding(top = it.calculateTopPadding())) {
-
             WhatsAppToggle(selectedOption = selectedApp) { app ->
                 selectedApp = app
             }
@@ -177,11 +137,12 @@ fun StatusScreen(navController: NavController) {
 
             Spacer(Modifier.height(8.dp))
 
-            val filteredFiles = statusFiles.filter {
+            val filteredFiles = statusFiles.filter { file ->
+                val extension = file.extension.lowercase()
                 if (selectedTabIndex == 0) {
-                    it.extension.lowercase() in listOf("jpg", "jpeg", "png", "webp")
+                    extension in listOf("jpg", "jpeg", "png", "webp")
                 } else {
-                    it.extension.lowercase() in listOf("mp4", "3gp")
+                    extension in listOf("mp4", "3gp")
                 }
             }
 
@@ -223,7 +184,6 @@ fun StatusScreen(navController: NavController) {
                         }
                     }
                 }
-
             }
         }
     }
@@ -287,31 +247,43 @@ fun VideoThumbnail(file: File, onClick: () -> Unit) {
 }
 
 
-fun loadStatuses(app: String): List<File> {
-    val path = if (app == "WhatsApp")
-        "/storage/emulated/0/Android/media/com.whatsapp/WhatsApp/Media/.Statuses"
-    else
+fun loadStatuses(appIdentifier: String): List<File> {
+    val path = if (appIdentifier == "WhatsApp_Business") {
         "/storage/emulated/0/Android/media/com.whatsapp.w4b/WhatsApp Business/Media/.Statuses"
+    } else {
+        "/storage/emulated/0/Android/media/com.whatsapp/WhatsApp/Media/.Statuses"
+    }
 
     val dir = File(path)
     return if (dir.exists()) {
-        dir.listFiles()?.filter { it.isFile }?.sortedByDescending { it.lastModified() }
+        dir.listFiles()
+            ?.filter { it.isFile && !it.name.endsWith(".nomedia") }
+            ?.sortedByDescending { it.lastModified() }
             ?: emptyList()
-    } else emptyList()
+    } else {
+        emptyList()
+    }
 }
+
 
 @Composable
 fun WhatsAppToggle(
     selectedOption: String,
     onOptionSelected: (String) -> Unit
 ) {
-    val options = listOf(stringResource(id = R.string.WhatsApp), stringResource(id = R.string.Business))
+    val options = mapOf(
+        "WhatsApp" to stringResource(id = R.string.WhatsApp),
+        "WhatsApp_Business" to stringResource(id = R.string.WhatsApp_Business)
+    )
 
     Row(
-        modifier = Modifier.padding(10.dp)
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(10.dp)
+            .background(Color.LightGray.copy(alpha = 0.2f), RoundedCornerShape(6.dp))
     ) {
-        options.forEach { option ->
-            val isSelected = option == selectedOption
+        options.forEach { (identifier, displayText) ->
+            val isSelected = identifier == selectedOption
             Box(
                 modifier = Modifier
                     .weight(1f)
@@ -319,14 +291,15 @@ fun WhatsAppToggle(
                     .background(
                         if (isSelected) Color(0xFF00BFA5) else Color.Transparent
                     )
-                    .clickable { onOptionSelected(option) }
+                    .clickable { onOptionSelected(identifier) }
                     .padding(vertical = 8.dp),
                 contentAlignment = Alignment.Center
             ) {
                 Text(
-                    text = option,
+                    text = displayText,
                     color = if (isSelected) Color.White else Color.Gray,
-                    fontSize = 14.sp
+                    fontSize = 14.sp,
+                    fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal
                 )
             }
         }

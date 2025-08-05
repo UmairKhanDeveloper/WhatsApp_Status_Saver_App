@@ -3,7 +3,6 @@ package com.example.whatsapp_status_saver_app.screens
 import android.annotation.SuppressLint
 import android.app.DownloadManager
 import android.content.Context
-import android.content.Intent
 import android.graphics.Bitmap
 import android.media.MediaMetadataRetriever
 import android.net.Uri
@@ -33,14 +32,12 @@ import androidx.compose.material.icons.filled.Whatsapp
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -55,8 +52,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.content.FileProvider
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.whatsapp_status_saver_app.R
@@ -91,7 +86,13 @@ fun SingleViewScreen(navController: NavController, filePath: String?) {
                 val destFile = File(downloadsDir, it.name)
                 it.copyTo(destFile, overwrite = true)
 
-                val type = if (it.extension.lowercase() in listOf("jpg", "jpeg", "png", "webp")) "image" else "video"
+                val type = if (it.extension.lowercase() in listOf(
+                        "jpg",
+                        "jpeg",
+                        "png",
+                        "webp"
+                    )
+                ) "image" else "video"
                 viewModel.insert(destFile.absolutePath, type)
 
                 val dm = context.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
@@ -140,8 +141,30 @@ fun SingleViewScreen(navController: NavController, filePath: String?) {
             TopAppBar(
                 title = { Text(stringResource(id = R.string.View_Status)) },
                 navigationIcon = {
-                    IconButton(onClick = { navController.popBackStack() }) {
-                        Icon(Icons.Default.KeyboardArrowLeft, contentDescription = "Back")
+                    Row(
+                        modifier = Modifier.padding(start = 10.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Box(
+                            modifier = Modifier
+                                .clickable { navController.popBackStack() }
+                                .clip(RoundedCornerShape(10.dp))
+                                .size(32.dp)
+                                .background(Color(0XFF039840).copy(alpha = 0.1f)),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Icon(
+                                Icons.Default.KeyboardArrowLeft,
+                                contentDescription = "Back",
+                                tint = Color(0XFF039840)
+                            )
+                        }
+                        Spacer(Modifier.width(20.dp))
+                        Text(
+                            stringResource(id = R.string.Status),
+                            color = Color.Black,
+                            fontSize = 20.sp
+                        )
                     }
                 }
             )
@@ -165,11 +188,22 @@ fun SingleViewScreen(navController: NavController, filePath: String?) {
                 if (file != null && file.exists()) {
                     when (file.extension.lowercase()) {
                         in listOf("jpg", "jpeg", "png", "webp") -> {
-                            AsyncImage(model = file, contentDescription = null, modifier = Modifier.fillMaxSize(), contentScale = ContentScale.Fit)
+                            AsyncImage(
+                                model = file,
+                                contentDescription = null,
+                                modifier = Modifier.fillMaxSize(),
+                                contentScale = ContentScale.Fit
+                            )
                         }
+
                         in listOf("mp4", "3gp") -> {
                             if (thumbnail != null) {
-                                Image(bitmap = thumbnail!!.asImageBitmap(), contentDescription = null, modifier = Modifier.fillMaxSize())
+                                Image(
+                                    bitmap = thumbnail!!.asImageBitmap(),
+                                    contentDescription = null,
+                                    modifier = Modifier.fillMaxSize(),
+                                    contentScale = ContentScale.FillWidth
+                                )
                                 Icon(
                                     Icons.Default.PlayArrow,
                                     contentDescription = "Play Video",
@@ -179,22 +213,34 @@ fun SingleViewScreen(navController: NavController, filePath: String?) {
                                         .background(Color.Black.copy(alpha = 0.5f), CircleShape)
                                         .padding(8.dp)
                                         .clickable {
-                                            navController.navigate(Screens.ExoPlayer.route + "/${Uri.encode(file.absolutePath)}")
+                                            navController.navigate(
+                                                Screens.ExoPlayer.route + "/${
+                                                    Uri.encode(
+                                                        file.absolutePath
+                                                    )
+                                                }"
+                                            )
                                         }
                                 )
                             } else CircularProgressIndicator()
                         }
-                        else -> Text(stringResource(id = R.string.Unsupported_File), color = Color.Gray)
+
+                        else -> Text(
+                            stringResource(id = R.string.Unsupported_File),
+                            color = Color.Gray
+                        )
                     }
                 } else {
                     Text(stringResource(id = R.string.File_not_found), color = Color.Gray)
                 }
             }
             Row(
-                modifier = Modifier.fillMaxWidth().padding(vertical = 16.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 16.dp),
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
-                ActionIconButton(Icons.Default.Whatsapp, "WhatsApp") {  }
+                ActionIconButton(Icons.Default.Whatsapp, "WhatsApp") { }
                 ActionIconButton(Icons.Default.Share, "Share") {}
                 ActionIconButton(Icons.Default.Download, "Download") { downloadStatus() }
             }

@@ -5,8 +5,10 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
 
 @Composable
 fun Navigation(navController: NavHostController) {
@@ -25,10 +27,15 @@ fun Navigation(navController: NavHostController) {
             LanguageSelectionScreen(navController)
         }
 
-        composable(Screens.StatusScreen.route) {
-            StatusScreen(navController)
+        composable(
+            Screens.StatusScreen.route + "/{appType}",
+            arguments = listOf(navArgument("appType") { type = NavType.StringType })
+        ) { backStackEntry ->
+            StatusScreen(
+                navController = navController,
+                appType = backStackEntry.arguments?.getString("appType")
+            )
         }
-
         composable(Screens.SingleViewScreen.route + "/{filePath}") { backStackEntry ->
             val filePath = backStackEntry.arguments?.getString("filePath")
             SingleViewScreen(navController, filePath)

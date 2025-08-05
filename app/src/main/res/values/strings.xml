@@ -3,8 +3,8 @@
     <string name="Status_Up" translatable="false">Status Up</string>
     <string name="All_in_one_status_saver" translatable="false">All in one status saver</string>
     <string name="WhatsApp" translatable="false">WhatsApp</string>
-    <string name="WhatsApp_Business" translatable="false">WhatsApp Business</string>
-    <string name="WhatsApp_Web" translatable="false">WhatsApp Web</string>
+    <string name="WhatsApp_Business" translatable="false">Business</string>
+    <string name="WhatsApp_Web" translatable="false"> Web</string>
     <string name="Direct_Chat" translatable="false">Direct Chat</string>
     <string name="Saved_Files" translatable="false">Saved Files</string>
     <string name="Rate_US" translatable="false">Rate US</string>

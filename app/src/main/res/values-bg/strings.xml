@@ -4,8 +4,8 @@
     <string name="Status_Up">Статус нагоре</string>
     <string name="All_in_one_status_saver">Всичко в едно запазване на статус</string>
     <string name="WhatsApp">WhatsApp</string>
-    <string name="WhatsApp_Business">WhatsApp Бизнес</string>
-    <string name="WhatsApp_Web">WhatsApp Уеб</string>
+    <string name="WhatsApp_Business">Бизнес</string>
+    <string name="WhatsApp_Web"> Уеб</string>
     <string name="Direct_Chat">Директен чат</string>
     <string name="Saved_Files">Запазени файлове</string>
     <string name="Rate_US">Оценете ни</string>

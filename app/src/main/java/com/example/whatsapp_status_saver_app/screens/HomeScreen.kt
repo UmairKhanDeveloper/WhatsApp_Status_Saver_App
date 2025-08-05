@@ -1,7 +1,14 @@
 package com.example.whatsapp_status_saver_app.screens
 
+import android.Manifest
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
+import android.os.Environment
+import android.provider.Settings
+import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -33,6 +40,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -63,6 +71,40 @@ fun HomeScreen(navController: NavController, countryCode: String?) {
     }
 
     var showRateUsDialog by remember { mutableStateOf(false) }
+    var permissionGranted by remember { mutableStateOf(false) }
+
+    val permissionLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestMultiplePermissions()
+    ) { perms ->
+        if (perms.values.all { it }) {
+            permissionGranted = true
+            Toast.makeText(context, "Permission Granted!", Toast.LENGTH_SHORT).show()
+        } else {
+            Toast.makeText(context, "Permission is required to see statuses!", Toast.LENGTH_SHORT).show()
+        }
+    }
+    LaunchedEffect(Unit) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            if (Environment.isExternalStorageManager()) {
+                permissionGranted = true
+            } else {
+                val intent = Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION)
+                    .setData(Uri.parse("package:${context.packageName}"))
+                context.startActivity(intent)
+            }
+        } else {
+            val requiredPermissions = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                arrayOf(
+                    Manifest.permission.READ_MEDIA_IMAGES,
+                    Manifest.permission.READ_MEDIA_VIDEO
+                )
+            } else {
+                arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE)
+            }
+            permissionLauncher.launch(requiredPermissions)
+        }
+    }
+
 
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         Column(modifier = Modifier.fillMaxSize()) {
@@ -136,12 +178,11 @@ fun HomeScreen(navController: NavController, countryCode: String?) {
                 SelectionWhats(
                     title = stringResource(id = R.string.WhatsApp),
                     icon = R.drawable.image_1
-                ) { navController.navigate(Screens.StatusScreen.route) }
-
+                ) { navController.navigate(Screens.StatusScreen.route + "/WhatsApp") }
                 SelectionWhats(
                     title = stringResource(id = R.string.WhatsApp_Business),
                     icon = R.drawable.image_2
-                ) { navController.navigate(Screens.StatusScreen.route) }
+                ) { navController.navigate(Screens.StatusScreen.route + "/WhatsApp_Business") }
 
                 SelectionWhats(
                     title = stringResource(id = R.string.WhatsApp_Web),
@@ -149,9 +190,7 @@ fun HomeScreen(navController: NavController, countryCode: String?) {
                 ) {
                     val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://web.whatsapp.com"))
                     context.startActivity(intent)
-
                 }
-
             }
         }
 
