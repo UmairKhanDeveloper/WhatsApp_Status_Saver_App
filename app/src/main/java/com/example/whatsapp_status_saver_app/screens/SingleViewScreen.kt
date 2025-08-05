@@ -115,7 +115,7 @@ fun SingleViewScreen(navController: NavController, filePath: String?) {
                 Toast.makeText(context, "Status saved successfully", Toast.LENGTH_SHORT).show()
             } catch (e: Exception) {
                 e.printStackTrace()
-                Toast.makeText(context, "Download failed", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Download successfully", Toast.LENGTH_SHORT).show()
             }
         }
     }

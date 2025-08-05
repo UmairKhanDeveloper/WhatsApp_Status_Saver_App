@@ -79,8 +79,8 @@ dependencies {
     implementation("androidx.room:room-ktx:$roomVersion")
     testImplementation("androidx.room:room-testing:$roomVersion")
     implementation("androidx.compose.runtime:runtime-livedata:1.6.10")
-    
 
+    implementation("androidx.documentfile:documentfile:1.0.1")
 
 
 }

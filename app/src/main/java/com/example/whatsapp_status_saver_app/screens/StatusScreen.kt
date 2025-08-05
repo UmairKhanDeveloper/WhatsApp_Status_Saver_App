@@ -3,6 +3,7 @@ package com.example.whatsapp_status_saver_app.screens
 import android.media.ThumbnailUtils
 import android.net.Uri
 import android.os.Build
+import android.os.FileObserver
 import android.provider.MediaStore
 import android.util.Size
 import androidx.compose.foundation.Image
@@ -37,6 +38,7 @@ import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -66,12 +68,30 @@ fun StatusScreen(navController: NavController, appType: String?) {
     val tabTitles = listOf(stringResource(id = R.string.Photos), stringResource(id = R.string.Videos))
 
     var selectedApp by remember { mutableStateOf(appType ?: "WhatsApp") }
-
     var statusFiles by remember { mutableStateOf(listOf<File>()) }
 
     LaunchedEffect(selectedApp) {
-        delay(100)
         statusFiles = loadStatuses(selectedApp)
+    }
+
+    DisposableEffect(selectedApp) {
+        val path = if (selectedApp == "WhatsApp_Business") {
+            "/storage/emulated/0/Android/media/com.whatsapp.w4b/WhatsApp Business/Media/.Statuses"
+        } else {
+            "/storage/emulated/0/Android/media/com.whatsapp/WhatsApp/Media/.Statuses"
+        }
+        val observer = object : FileObserver(path, CREATE or MOVED_TO or DELETE) {
+            override fun onEvent(event: Int, pathName: String?) {
+                if (pathName != null) {
+                    statusFiles = loadStatuses(selectedApp)
+                }
+            }
+        }
+        observer.startWatching()
+
+        onDispose {
+            observer.stopWatching()
+        }
     }
 
     Scaffold(
@@ -138,12 +158,9 @@ fun StatusScreen(navController: NavController, appType: String?) {
             Spacer(Modifier.height(8.dp))
 
             val filteredFiles = statusFiles.filter { file ->
-                val extension = file.extension.lowercase()
-                if (selectedTabIndex == 0) {
-                    extension in listOf("jpg", "jpeg", "png", "webp")
-                } else {
-                    extension in listOf("mp4", "3gp")
-                }
+                val ext = file.extension.lowercase()
+                if (selectedTabIndex == 0) ext in listOf("jpg", "jpeg", "png", "webp")
+                else ext in listOf("mp4", "3gp")
             }
 
             if (filteredFiles.isEmpty()) {
@@ -151,10 +168,7 @@ fun StatusScreen(navController: NavController, appType: String?) {
                     Text(stringResource(id = R.string.No_Status_Found), color = Color.Gray)
                 }
             } else {
-                LazyVerticalGrid(
-                    columns = GridCells.Fixed(3),
-                    contentPadding = PaddingValues(4.dp)
-                ) {
+                LazyVerticalGrid(columns = GridCells.Fixed(3), contentPadding = PaddingValues(4.dp)) {
                     items(filteredFiles) { file ->
                         if (selectedTabIndex == 0) {
                             AsyncImage(
@@ -173,14 +187,11 @@ fun StatusScreen(navController: NavController, appType: String?) {
                                     }
                             )
                         } else {
-                            VideoThumbnail(
-                                file = file,
-                                onClick = {
-                                    navController.navigate(
-                                        Screens.SingleViewScreen.route + "/${Uri.encode(file.absolutePath)}"
-                                    )
-                                }
-                            )
+                            VideoThumbnail(file) {
+                                navController.navigate(
+                                    Screens.SingleViewScreen.route + "/${Uri.encode(file.absolutePath)}"
+                                )
+                            }
                         }
                     }
                 }
